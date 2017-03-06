@@ -1,0 +1,43 @@
+<project name="Sumit Migration test" default="retrieve" basedir="." xmlns:sf="antlib:com.salesforce">
+	<property file="build.properties"/>
+	<property environment="env"/>
+  <target name="deploy">
+	<sf:deploy
+			username="${sf2.username}"
+			password="${sf2.password}"
+			serverurl="${sf.serverurl}"
+			deployRoot="retrieveTarget"
+			runAllTests="true" />
+  </target>
+  <target name="retrieve">
+	  <sf:retrieve username="${sf1.username}"
+				   password="${sf1.password}"
+				   serverurl="${sf.serverurl}"
+				   retrieveTarget="retrieveTarget"
+				   unpackaged="${sf1.unpackaged}"/>
+        <echo message="Commiting all changes with message ${gt.commitMessage}" />
+		<git command="add" dir="${sf1.gitDirectory}">
+			<args>
+				<arg value="." />
+			</args>
+		</git>
+		<git command="commit" dir="${sf1.gitDirectory}">
+			<args>
+				<arg value="-am ${gt.commitMessage}" />
+			</args>
+		</git>
+	</target>
+	<macrodef name="git">
+		<attribute name="command" />
+		<attribute name="dir" />
+		<element name="args" optional="true" />
+		<sequential>
+            <echo message="Executing Command in folder @{dir}" />
+            <echo message="git @{command}" />
+			<exec executable="git" dir="@{dir}">
+				<arg value="@{command}" />
+				<args/>
+			</exec>
+		</sequential>
+	</macrodef>
+</project>
