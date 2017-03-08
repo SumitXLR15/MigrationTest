@@ -14,30 +14,6 @@
 				   password="${sf1.password}"
 				   serverurl="${sf.serverurl}"
 				   retrieveTarget="retrieveTarget"
-				   unpackaged="${sf1.unpackaged}"/>
-        <echo message="Commiting all changes with message ${gt.commitMessage}" />
-		<git command="add" dir="${sf1.gitDirectory}">
-			<args>
-				<arg value="." />
-			</args>
-		</git>
-		<git command="commit" dir="${sf1.gitDirectory}">
-			<args>
-				<arg value="-am ${gt.commitMessage}" />
-			</args>
-		</git>
+				   unpackaged="retrieveTarget/package.xml"/>
 	</target>
-	<macrodef name="git">
-		<attribute name="command" />
-		<attribute name="dir" />
-		<element name="args" optional="true" />
-		<sequential>
-            <echo message="Executing Command in folder @{dir}" />
-            <echo message="git @{command}" />
-			<exec executable="git" dir="@{dir}">
-				<arg value="@{command}" />
-				<args/>
-			</exec>
-		</sequential>
-	</macrodef>
 </project>
